@@ -39,19 +39,27 @@
 </div>
 <body>
     <script>
-        new Vue({
+        let STORAGE_KEY = 'todolist'
+        function fetch() {
+            return JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]')
+        }
+        function save(items) {
+            window.localStorage.setItem(STORAGE_KEY,JSON.stringify(items))
+        }
+        let doit = new Vue({
            el:'#app' ,
            data:{
             newtodo:{
                 content:'',
                 done:false
             },
-            todolist:[
-                {
-                    content:'现在开始吧',
-                    done:false
-                }
-            ]
+            // todolist:[
+            //     {
+            //         content:'现在开始吧',
+            //         done:false
+            //     }
+            // ]
+            todolist: fetch()//每次进入时通过fetch()读取
            },
            methods: {
                add: function () {
@@ -75,6 +83,15 @@
                    return this.todolist.filter(function (val) {
                        return val.done
                    }).length
+               }
+           },
+           //通过watch来监听todolist的变化，一旦变化就通过save()保存
+           watch: {
+               todolist:{
+                   handler(items){
+                       save(items)
+                   },
+                   deep:true
                }
            }
         })
