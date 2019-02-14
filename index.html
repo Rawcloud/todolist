@@ -22,12 +22,15 @@
             <p>进行中：{{todolist.length}} 已完成：{{donenum}}</p>
             <el-row v-for="(item,index) in todolist" key="index" class="list-row">
                 <el-col :xs="2" :sm="1" :md="1" :lg="1" :xl="1" class="check" :class="{done:todolist[index].done}">
+                    <!--双向绑定checkbox，item.done的值判断是否选中-->
                     <el-checkbox size="mini" v-model="item.done" ></el-checkbox>
                 </el-col>
                 <el-col :xs="20" :sm="22" :md="22" :lg="22" :xl="22">
+                    <!--给input绑定一个删除线的class，当done为true表示完成时就添加这个class-->
                     <input type="text" v-model="item.content" class="ipcont" :class="{done: todolist[index].done}">
                 </el-col>
                 <el-col :xs="2" :sm="1" :md="1" :lg="1" :xl="1" class="close">
+                    <!--点击出发删除函数，会把index传给自己定义del函数，-->
                     <i class="el-icon-close" @click="del(index)"></i>
                 </el-col>
             </el-row>
@@ -52,20 +55,23 @@
            },
            methods: {
                add: function () {
+                //if判断输入内容是否为空，不为空就把输入的内容添加到todolist
                 if (this.newtodo.content) {
                     this.todolist.push(this.newtodo)
+                    //添加后把input的内容复位
                     this.newtodo = {
                         content:'',
                         done:false
                     }
                 }
                },
-               del:function(index){
+               del:function(index){//这里很好理解，点击就删除，用的是原生js的splice()
                 this.todolist.splice(index,1)
                }
            },
            computed: {
-               donenum:function(){
+               donenum:function(){//计算属性，filter()把，done为true的返回出来，然后用length得出为true的一共有几个
+                   //在HTML部分的 “已完成：{{ donenum }}” 把已完成的显示到页面上
                    return this.todolist.filter(function (val) {
                        return val.done
                    }).length
