@@ -11,20 +11,64 @@
     <title>todolist</title>
 </head>
 <div id="app">
-    <el-input></el-input>
+    <!-- <el-input></el-input> -->
+    <el-container>
+        <el-header height="20">
+            <h1>ToDoList</h1>
+        </el-header>
+        <el-main>
+            <el-input placeholder="回车添加待办事项" class="todoinput" @keyup.enter.native="add" v-model="newtodo.content"></el-input>
+            <p>进行中：{{todolist.length}} 已完成：{{donenum}}</p>
+            <el-row v-for="(item,index) in todolist" key="index" class="list-row">
+                <el-col :xs="2" :sm="1" :md="1" :lg="1" :xl="1" class="check" :class="{done:todolist[index].done}">
+                    <el-checkbox size="mini" v-model="item.content" ></el-checkbox>
+                </el-col>
+                <el-col :xs="20" :sm="22" :md="22" :lg="22" :xl="22">
+                    <input type="text" v-model="item.content" class="ipcont" :class="{done: todolist[index].done}">
+                </el-col>
+                <el-col :xs="2" :sm="1" :md="1" :lg="1" :xl="1" class="close">
+                    <i class="el-icon-close" @click="del(index)"></i>
+                </el-col>
+            </el-row>
+        </el-main>
+    </el-container>
 </div>
 <body>
     <script>
         new Vue({
            el:'#app' ,
            data:{
-
+            newtodo:{
+                content:'',
+                done:false
+            },
+            todolist:[
+                {
+                    content:'现在开始吧',
+                    done:false
+                }
+            ]
            },
            methods: {
-               
+               add: function () {
+                if (this.newtodo.content) {
+                    this.todolist.push(this.newtodo)
+                    this.newtodo = {
+                        content:'',
+                        done:false
+                    }
+                }
+               },
+               del:function(index){
+                this.todolist.splice(index,1)
+               }
            },
            computed: {
-               
+               donenum:function(){
+                   return this.todolist.filter(function (val) {
+                       return val.done
+                   }).length
+               }
            }
         })
     </script>
