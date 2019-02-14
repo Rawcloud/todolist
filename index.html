@@ -22,7 +22,7 @@
             <p>进行中：{{todolist.length}} 已完成：{{donenum}}</p>
             <el-row v-for="(item,index) in todolist" key="index" class="list-row">
                 <el-col :xs="2" :sm="1" :md="1" :lg="1" :xl="1" class="check" :class="{done:todolist[index].done}">
-                    <el-checkbox size="mini" v-model="item.content" ></el-checkbox>
+                    <el-checkbox size="mini" v-model="item.done" ></el-checkbox>
                 </el-col>
                 <el-col :xs="20" :sm="22" :md="22" :lg="22" :xl="22">
                     <input type="text" v-model="item.content" class="ipcont" :class="{done: todolist[index].done}">
